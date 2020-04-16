@@ -1,0 +1,494 @@
+// Zestaw 24
+// Julian German 171698 Jan Cieplinski 171827
+
+using System;
+
+namespace projektSANGN
+{
+    class MainClass
+    {
+        public static void Main(string[] args)
+        {
+            double A1 = 215; 
+            double A2 = 450; // Erl
+            double A3 = 670;
+            double B = 0.002;
+            double E1 = 1;
+            double E2 = 1;
+            double E3 = 1;
+            double N_1 = 1;
+            double N_2 = 1;
+            double N_3 = 1;
+            double n_DSP = 8;
+
+
+            // E1,N = 1
+
+            while (E1 > B)
+            {
+                E1 = (A1 * E1) / (N_1 + (A1 * E1));
+                if (E1 <= B)
+                    Console.WriteLine("N_1: " + N_1 );
+                N_1++;
+            };
+
+            while (E2 > B)
+            {
+                E2 = (A2 * E2) / (N_2 + (A2 * E2));
+                if (E2 <= B)
+                    Console.WriteLine("N_2: " + N_2);
+                N_2++;
+
+            };
+
+            while (E3 > B)
+            {
+                E3 = (A3 * E3) / (N_3 + (A3 * E3));                
+                if (E3 <= B)
+                    Console.WriteLine("N_3: " + N_3);
+                N_3++; 
+            }
+
+            double N1_PCM = Math.Floor(N_1 / 30);
+            double N2_PCM = Math.Floor(N_2 / 30);
+            double N3_PCM = Math.Floor(N_3 / 30);
+
+            Console.WriteLine("\nN1_PCM : " + N1_PCM);
+            Console.WriteLine("N2_PCM : " + N2_PCM);
+            Console.WriteLine("N3_PCM : "  + N3_PCM);
+
+            double NR_1 = 30 * N1_PCM;
+            double NR_2 = 30 * N2_PCM;
+            double NR_3 = 30 * N3_PCM;
+
+            Console.WriteLine("\nNR_1 : " + NR_1);
+            Console.WriteLine("NR_2 : " + NR_2);
+            Console.WriteLine("NR_3 : " + NR_3);
+
+            double N1_DSP = Math.Floor(NR_1 / n_DSP);
+            double N2_DSP = Math.Floor(NR_2 / n_DSP);
+            double N3_DSP = Math.Floor(NR_3 / n_DSP);
+
+            Console.WriteLine("\nN1_DSP : " + N1_DSP);
+            Console.WriteLine("N2_DSP : " + N2_DSP);
+            Console.WriteLine("N3_DSP : " + N3_DSP);
+
+            // Obliczenie A_out do danego GW od strony sieci DiffServ
+
+            double lambda_RT_4 = 12200;
+            double lambda_RT_5 = 15200;
+            double lambda_RT_6 = 11200;
+            double Tpak_G729 = 20 * Math.Pow(10, -3);
+            double lambda_G729 = 1/Tpak_G729;
+
+            double A_out_1 = Math.Floor(0.25 * A2 + 0.2 * A3 + 0.15 * (lambda_RT_4 / lambda_G729) + 0.35 * (lambda_RT_5 / lambda_G729) + 0.2 * (lambda_RT_6 / lambda_G729));
+            double A_out_2 = Math.Floor(0.11 * A1 + 0.2 * A3 + 0.15 * (lambda_RT_4 / lambda_G729) + 0.15 * (lambda_RT_5 / lambda_G729) + 0.2 * (lambda_RT_6 / lambda_G729));
+            double A_out_3 = Math.Floor(0.35 * A1 + 0.25 * A2 + 0.15 * (lambda_RT_4 / lambda_G729) + 0.1 * (lambda_RT_5 / lambda_G729) + 0.2 * (lambda_RT_6 / lambda_G729));
+
+            Console.WriteLine("\nA_out_1 : " + A_out_1);
+            Console.WriteLine("A_out_2 : " + A_out_2);
+            Console.WriteLine("A_out_3 : " + A_out_3);
+
+
+            double E11 = 1;
+            double E22 = 1;
+            double E33 = 1;
+            double N_11 = 1;
+            double N_22 = 1;
+            double N_33 = 1;
+
+            while (E11 > B)
+            {
+                E11 = (A_out_1 * E11) / (N_11 + (A_out_1 * E11));
+                if (E11 <= B)
+                    Console.WriteLine("\nN_1: " + N_11);
+                N_11++;
+            };
+
+            while (E22 > B)
+            {
+                E22 = (A_out_2 * E22) / (N_22 + (A_out_2 * E22));
+                if (E22 <= B)
+                    Console.WriteLine("N_2: " + N_22);
+                N_22++;
+
+            };
+
+            while (E33 > B)
+            {
+                E33 = (A_out_3 * E33) / (N_33 + (A_out_3 * E33));
+                if (E33 <= B)
+                    Console.WriteLine("N_3: " + N_33);
+                N_33++;
+            }
+
+            double N11_PCM = Math.Floor(N_11 / 30);
+            double N22_PCM = Math.Floor(N_22 / 30);
+            double N33_PCM = Math.Floor(N_33 / 30);
+
+            Console.WriteLine("\nN1_PCM_out : " + N11_PCM);
+            Console.WriteLine("N2_PCM_out : " + N22_PCM);
+            Console.WriteLine("N3_PCM_out : " + N33_PCM);
+
+            double NR_11 = 30 * N11_PCM;
+            double NR_22 = 30 * N22_PCM;
+            double NR_33 = 30 * N33_PCM;
+
+            Console.WriteLine("\nNR_1_out : " + NR_11);
+            Console.WriteLine("NR_2_out : " + NR_22);
+            Console.WriteLine("NR_3_out : " + NR_33);
+
+            double N1_DSP_out= Math.Floor(NR_11 / n_DSP);
+            double N2_DSP_out = Math.Floor(NR_22 / n_DSP);
+            double N3_DSP_out = Math.Floor(NR_33/ n_DSP);
+
+            Console.WriteLine("\nN1_DSP_out : " + N1_DSP_out);
+            Console.WriteLine("N2_DSP_out : " + N2_DSP_out);
+            Console.WriteLine("N3_DSP_out: " + N3_DSP_out);
+
+
+
+            // Obliczanie C
+
+            double Tpak_G711 = 10 * Math.Pow(10, -3);
+            double lambda_G711 = 1/ Tpak_G711; // 1/s
+            double lb_nag = 40; // B
+            double lb_pakiet = Tpak_G711 / (125 * Math.Pow(10, -6));
+            double bcal_G711 = 8 * (lb_nag + lb_pakiet); // b
+
+            double lb_pakiet_ip = 10; // [B] 
+            double bcal_G729 = 8 * (lb_nag + lb_pakiet_ip); //b
+
+            Console.WriteLine("\nlambda G711 : " + lambda_G711);
+            Console.WriteLine("b_cal G711 : " + bcal_G711);
+            Console.WriteLine("lambda G729: " + lambda_G729);
+            Console.WriteLine("b_cal G729 : " + bcal_G729);
+
+            double c12 = 0.11 * NR_1 * lambda_G711 * bcal_G711;
+            double c13 = 0.35 * NR_1 * lambda_G711 * bcal_G711;
+            double c21 = 0.25 * NR_2 * lambda_G711 * bcal_G711;
+            double c23 = 0.25 * NR_2 * lambda_G711 * bcal_G711;
+            double c31 = 0.2 * NR_3 * lambda_G711 * bcal_G711;
+            double c32 = 0.2 * NR_3 * lambda_G711 * bcal_G711;
+
+            Console.WriteLine("\nc12 " + c12 * Math.Pow(10,-6)+"\tc13 " + c13 * Math.Pow(10,-6)
+            + "\tc21 " + c21 * Math.Pow(10, -6) + "\tc23 " + c23 * Math.Pow(10, -6) + "\tc31 " +
+            c31 * Math.Pow(10, -6) + "\tc32 " + c32 * Math.Pow(10, -6));            // Mbit / s 
+            
+
+            double c14 = 0.15 * NR_1 * lambda_G729 * bcal_G729;
+            double c15 = 0.2 * NR_1 * lambda_G729 * bcal_G729;
+            double c16 = 0.19 * NR_1 * lambda_G729 * bcal_G729;
+            double c24 = 0.15 * NR_2 * lambda_G729 * bcal_G729;
+            double c25 = 0.25 * NR_2 * lambda_G729 * bcal_G729;
+            double c26 = 0.15 * NR_2 * lambda_G729 * bcal_G729;
+            double c34 = 0.1 * NR_3 * lambda_G729 * bcal_G729;
+            double c35 = 0.3 * NR_3 * lambda_G729 * bcal_G729;
+            double c36 = 0.2 * NR_3 * lambda_G729 * bcal_G729;
+
+            Console.WriteLine("c14 " + c14 * Math.Pow(10,-6));
+            Console.WriteLine("c15 " + c15 * Math.Pow(10, -6));
+            Console.WriteLine("c16 " + c16 * Math.Pow(10, -6));
+            Console.WriteLine("c24 " + c24 * Math.Pow(10, -6));
+            Console.WriteLine("c25 " + c25 * Math.Pow(10, -6));
+            Console.WriteLine("c26 " + c26 * Math.Pow(10, -6));
+            Console.WriteLine("c34 " + c34 * Math.Pow(10, -6));
+            Console.WriteLine("c35 " + c35 * Math.Pow(10, -6));
+            Console.WriteLine("c36 " + c36 * Math.Pow(10, -6));
+
+           
+
+            double c41 = 0.15 * lambda_RT_4 * bcal_G729;    // bcal 729 = b cal RT
+            double c42 = 0.15 * lambda_RT_4 * bcal_G729;
+            double c43 = 0.15 * lambda_RT_4 * bcal_G729;
+            double c45 = 0.15 * lambda_RT_4 * bcal_G729;
+            double c46 = 0.4 * lambda_RT_4 * bcal_G729;
+
+            double c51 = 0.35 * lambda_RT_5 * bcal_G729;
+            double c52 = 0.15 * lambda_RT_5 * bcal_G729;
+            double c53 = 0.1 * lambda_RT_5 * bcal_G729;
+            double c54 = 0.2 * lambda_RT_5 * bcal_G729;
+            double c56 = 0.2 * lambda_RT_5 * bcal_G729;
+
+            double c61 = 0.2 * lambda_RT_6 * bcal_G729;
+            double c62 = 0.2 * lambda_RT_6 * bcal_G729;
+            double c63 = 0.2 * lambda_RT_6 * bcal_G729;
+            double c64 = 0.15 * lambda_RT_6 * bcal_G729;
+            double c65 = 0.25 * lambda_RT_6 * bcal_G729;
+
+            Console.WriteLine("c41 " + c41 * Math.Pow(10, -6));
+            Console.WriteLine("c42 " + c42 * Math.Pow(10, -6));
+            Console.WriteLine("c43 " + c43 * Math.Pow(10, -6));
+            Console.WriteLine("c45 " + c45 * Math.Pow(10, -6));
+            Console.WriteLine("c46 " + c46 * Math.Pow(10, -6));
+
+            Console.WriteLine("c51 " + c51 * Math.Pow(10, -6));
+            Console.WriteLine("c52 " + c52 * Math.Pow(10, -6));
+            Console.WriteLine("c53 " + c53 * Math.Pow(10, -6));
+            Console.WriteLine("c54 " + c54 * Math.Pow(10, -6));
+            Console.WriteLine("c56 " + c56 * Math.Pow(10, -6));
+
+            Console.WriteLine("c61 " + c61 * Math.Pow(10, -6));
+            Console.WriteLine("c62 " + c62 * Math.Pow(10, -6));
+            Console.WriteLine("c63 " + c63 * Math.Pow(10, -6));
+            Console.WriteLine("c64 " + c64 * Math.Pow(10, -6));
+            Console.WriteLine("c65 " + c65 * Math.Pow(10, -6));
+
+           
+            double sumGW1_AB = c12 + c13 + c14 + c15 + c16;
+            double sumGW2_AB = c21 + c23 + c24 + c25 + c26;
+            double sumGW3_AB = c31 + c32 + c34 + c35 + c36;
+
+            double sumGW1_BA = c21 + c31 + c41 + c51 + c61;
+            double sumGW2_BA = c12 + c32 + c42 + c52 + c62;
+            double sumGW3_BA = c13 + c23 + c43 + c53 + c63;
+
+            Console.WriteLine("\n Przeplywnosci na GW [Mb/s]");
+            Console.WriteLine("GW1_AB : " + sumGW1_AB * Math.Pow(10, -6));
+            Console.WriteLine("GW2_AB : " + sumGW2_AB * Math.Pow(10, -6));
+            Console.WriteLine("GW3_AB : " + sumGW3_AB * Math.Pow(10, -6));
+            Console.WriteLine("GW1_BA : " + sumGW1_BA * Math.Pow(10, -6));
+            Console.WriteLine("GW2_BA : " + sumGW2_BA * Math.Pow(10, -6));
+            Console.WriteLine("GW3_BA : " + sumGW3_BA * Math.Pow(10, -6));
+
+            double c_RT_1 = sumGW1_AB + sumGW1_BA;
+            double c_RT_2 = sumGW2_AB + sumGW2_BA;
+            double c_RT_3 = sumGW3_AB + sumGW3_BA;
+
+            Console.WriteLine("\nc_RT_1 : " + c_RT_1 * Math.Pow(10, -6));
+            Console.WriteLine("c_RT_2 : " + c_RT_2 * Math.Pow(10, -6));
+            Console.WriteLine("c_RT_3 : " + c_RT_3 * Math.Pow(10, -6));
+
+
+            double C = 150 * Math.Pow(10, 6);
+
+
+            double RB3_RR5 = c31 + c34 + c35 + c13 + c43 + c53; 
+            double RR5_RR2 = c31 + c34 + c52 + c56 + c13 + c43 + c25 +c65;
+            double RR2_RR4 = c34 + c52 + c64 + c43 + c25 + c46;
+            double RR4_RB4 = c24 + c34 + c64 + c42 + c43 + c46;
+
+            double A_RT_RB3_RR5 = RB3_RR5 / C;
+            double A_RT_RR5_RR2 = RR5_RR2 / C;
+            double A_RT_RR2_RR4 = RR2_RR4 / C;
+            double A_RT_RR4_RB4 = RR4_RB4 / C;
+
+
+            Console.WriteLine("\nPrzeplywnosci dla klasy RT [Mb/s] ");
+            Console.WriteLine("RB3_RR5 : " + RB3_RR5 * Math.Pow(10, -6));
+            Console.WriteLine("RR5_RR2 : " + RR5_RR2 * Math.Pow(10, -6));
+            Console.WriteLine("RR2_RR4 : " + RR2_RR4 * Math.Pow(10,-6));
+            Console.WriteLine("RR4_RB4 : " + RR4_RB4 * Math.Pow(10, -6));
+
+     
+
+            Console.WriteLine("\nNatezenie ruchu A_RT oferowane na lacza");
+            Console.WriteLine("RB3_RR5 : " + A_RT_RB3_RR5);
+            Console.WriteLine("RR5_RR2 : " + A_RT_RR5_RR2);
+            Console.WriteLine("RR2_RR4 : " + A_RT_RR2_RR4);
+            Console.WriteLine("RR4_RB4 : " + A_RT_RR4_RB4);
+
+            double K1 = 5;
+
+            // Obliczanie IPLR
+
+            double B1 = ((1 - A_RT_RB3_RR5) / (1 - Math.Pow(A_RT_RB3_RR5, K1 + 2))) * Math.Pow(A_RT_RB3_RR5, K1 + 1);
+            double B2 = ((1 - A_RT_RR5_RR2) / (1 - Math.Pow(A_RT_RR5_RR2, K1 + 2))) * Math.Pow(A_RT_RR5_RR2, K1 + 1);
+            double B3 = ((1 - A_RT_RR2_RR4) / (1 - Math.Pow(A_RT_RR2_RR4, K1 + 2))) * Math.Pow(A_RT_RR2_RR4, K1 + 1);
+            double B4 = ((1 - A_RT_RR4_RB4) / (1 - Math.Pow(A_RT_RR4_RB4, K1 + 2))) * Math.Pow(A_RT_RR4_RB4, K1 + 1);
+
+            Console.WriteLine("IPLR");
+
+            Console.WriteLine("RB3_RR5 : " + B1);
+            Console.WriteLine("RR5_RR2 : " + B2);
+            Console.WriteLine("RR2_RR4 : " + B3);
+            Console.WriteLine("RR4_RB4 : " + B4);
+            
+
+            // IPDT RT
+
+            double Et_nad_RT = bcal_G729 / C;
+            double u_RT = 1 / Et_nad_RT;
+            Console.WriteLine("\nE(tnad) : " + Et_nad_RT);
+
+
+            double Etocz_1 = (A_RT_RB3_RR5 / u_RT) * (1 + (Math.Pow(A_RT_RB3_RR5, K1) * (K1 * A_RT_RB3_RR5 - (K1 + 1)))/(1-A_RT_RB3_RR5)*(1-Math.Pow(A_RT_RB3_RR5,K1+2)));
+            double Etocz_2 = (A_RT_RR5_RR2 / u_RT) * (1 + (Math.Pow(A_RT_RR5_RR2, K1) * (K1 * A_RT_RR5_RR2 - (K1 + 1))) / (1 - A_RT_RR5_RR2) * (1 - Math.Pow(A_RT_RR5_RR2, K1 + 2)));
+            double Etocz_3 = (A_RT_RR2_RR4 / u_RT) * (1 + (Math.Pow(A_RT_RR2_RR4, K1) * (K1 * A_RT_RR2_RR4 - (K1 + 1))) / (1 - A_RT_RR2_RR4) * (1 - Math.Pow(A_RT_RR2_RR4, K1 + 2)));
+            double Etocz_4 = (A_RT_RR4_RB4 / u_RT) * (1 + (Math.Pow(A_RT_RR4_RB4, K1) * (K1 * A_RT_RR4_RB4 - (K1 + 1))) / (1 - A_RT_RR4_RB4) * (1 - Math.Pow(A_RT_RR4_RB4, K1 + 2)));
+
+
+            Console.WriteLine("E(Tocz)");
+            Console.WriteLine("RB3_RR5 : " + Etocz_1);
+            Console.WriteLine("RR5_RR2 : " + Etocz_2);
+            Console.WriteLine("RR2_RR4 : " + Etocz_3);
+            Console.WriteLine("RR4_RB4 : " + Etocz_4);
+
+            //  ETprop = zmienic wartość 
+            double pom = (2 * 3 * Math.Pow(10, 8)) / 3;
+
+            double Etprop_1 = 30000 / pom;
+            double Etprop_2 = 70000 / pom;
+            double Etprop_3 = 40000 / pom;
+            double Etprop_4 = 50000 / pom;
+
+            Console.WriteLine("E(Tprop)");
+            Console.WriteLine("RB3_RR5 : " + Etprop_1);
+            Console.WriteLine("RR5_RR2 : " + Etprop_2);
+            Console.WriteLine("RR2_RR4 : " + Etprop_3);
+            Console.WriteLine("RR4_RB4 : " + Etprop_4);
+
+            // E(to) = IPDT 
+
+            double Eto_1 = Etocz_1 + Etprop_1 + Et_nad_RT;
+            double Eto_2 = Etocz_2 + Etprop_2 + Et_nad_RT;
+            double Eto_3 = Etocz_3 + Etprop_3 + Et_nad_RT;
+            double Eto_4 = Etocz_4 + Etprop_4 + Et_nad_RT;
+
+
+            Console.WriteLine("E(to), IPDT ");
+            Console.WriteLine("RB3_RR5 : " + Eto_1);
+            Console.WriteLine("RR5_RR2 : " + Eto_2);
+            Console.WriteLine("RR2_RR4 : " + Eto_3);
+            Console.WriteLine("RR4_RB4 : " + Eto_4);
+
+            // IPDVmax
+            double lb_pakiet_NRT = 1600;
+            double bcal_NRT = 8 * (lb_pakiet_NRT + 40);
+
+            
+            double lambda_NRT_5 = 21000;
+
+            double IPDT_min = Et_nad_RT;
+            double Et_nad_NRT = bcal_NRT / C;
+
+            double IPDT_max = ((K1 + 1) * Et_nad_RT) + Et_nad_NRT;
+
+            double IPDV_max = IPDT_max - IPDT_min;
+
+            Console.WriteLine("\nIPDT_min : " + IPDT_min);
+            Console.WriteLine("IPDT_max : " + IPDT_max);
+            Console.WriteLine("IPDV_max : " + IPDV_max);
+            // Koncowe wartosci - Sumy 
+            Console.WriteLine("\nKoncowe wartosci - sumy ");
+            Console.WriteLine("IPLR = " + (B1 + B2 + B3 + B4));
+            Console.WriteLine("IPDT = " + (Eto_1+Eto_2+Eto_3+Eto_4));
+            Console.WriteLine("IPDV_max_sum = " + 4*IPDV_max);
+
+
+            // NRT - Przeplywnosci strumieni
+
+
+
+
+            double RB5_RR1 = c51 + c54 + c15 + c45;
+            double RR1_RB4 = c14 + c54 + c41 + c45;
+
+            Console.WriteLine("\nSumaryczna przeplywnosc strumienia klasy RT [ Mb/s ]");
+            Console.WriteLine("RB5_RR1 : " + RB5_RR1 * Math.Pow(10,-6));
+            Console.WriteLine("RR1_RB4 : " + RR1_RB4 * Math.Pow(10,-6));
+
+            // c45 c46 c54 c56 c64 c65 rozplyw wg macierzy wzNRT
+
+            
+            double c54_NRT = 0.25 * lambda_NRT_5 * bcal_NRT;
+            double RB5_RR1_NRT =c54_NRT;
+            double RR1_RB4_NRT =c54_NRT;
+
+           
+            Console.WriteLine("\nc54_NRT : " + c54_NRT * Math.Pow(10, -6));
+
+            Console.WriteLine("\nSumaryczna przeplywnosc strumienia klasy NRT [ Mb/s ]");
+            Console.WriteLine("RB5_RR1 : " + RB5_RR1_NRT * Math.Pow(10, -6));
+            Console.WriteLine("RR1_RB4 : " + RR1_RB4_NRT * Math.Pow(10, -6));
+
+            double A_RT_RB5_RR1 = RB5_RR1 / C;
+            double A_RT_RR1_RB4 = RR1_RB4 / C;
+
+            Console.WriteLine("\nNatezenie ruchu A_RT oferowane na lacza");
+            Console.WriteLine("RB5_RR1 : " + A_RT_RB5_RR1);
+            Console.WriteLine("RR1_RB4 : " + A_RT_RR1_RB4);
+
+
+
+            double A_NRT_RB5_RR1 = RB5_RR1_NRT / (C - RB5_RR1); 
+            double A_NRT_RR1_RB4 = RR1_RB4_NRT / (C - RR1_RB4); 
+
+
+            Console.WriteLine("\nNatezenie ruchu A_NRT oferowane na lacza");
+            Console.WriteLine("RB5_RR1 : " + A_NRT_RB5_RR1); 
+            Console.WriteLine("RR1_RB4 : " + A_NRT_RR1_RB4); 
+
+
+            // IPLR dla NRT
+            double K2 = 25;
+            double B1_NRT = ((1 - A_NRT_RB5_RR1) / (1 - Math.Pow(A_NRT_RB5_RR1, K2 + 2))) * Math.Pow(A_NRT_RB5_RR1, K2 + 1);
+            double B2_NRT = ((1 - A_NRT_RR1_RB4) / (1 - Math.Pow(A_NRT_RR1_RB4, K2 + 2))) * Math.Pow(A_NRT_RR1_RB4, K2 + 1);
+            Console.WriteLine("\nIPLR");
+            Console.WriteLine("RB5_RR1 : " + B1_NRT);
+            Console.WriteLine("RR1_RB4 : " + B2_NRT);
+           
+
+            // IPDT dla NRT
+
+            
+            double u_NRT = 1 / Et_nad_NRT;
+
+            Console.WriteLine("\nE(tnad)_NRT : " + Et_nad_NRT);
+
+
+            double Etocz_1_NRT = (A_NRT_RB5_RR1 / u_NRT) * (1 + (Math.Pow(A_NRT_RB5_RR1, K2) * (K2 * A_NRT_RB5_RR1 - (K2 + 1))) / (1 - A_NRT_RB5_RR1) * (1 - Math.Pow(A_NRT_RB5_RR1, K2 + 2)));
+            double Etocz_2_NRT = (A_NRT_RR1_RB4 / u_NRT) * (1 + (Math.Pow(A_NRT_RR1_RB4, K2) * (K2 * A_NRT_RR1_RB4 - (K2 + 1))) / (1 - A_NRT_RR1_RB4) * (1 - Math.Pow(A_NRT_RR1_RB4, K2 + 2)));
+
+            Console.WriteLine("E(Tocz)_NRT");
+            Console.WriteLine("RB5_RR1 : " + Etocz_1_NRT);
+            Console.WriteLine("RR1_RB4 : " + Etocz_2_NRT);
+
+
+            double Etprop_1_NRT = 50000 / pom;
+            double Etprop_2_NRT = 40000 / pom;
+
+            Console.WriteLine("E(Tprop)_NRT");
+            Console.WriteLine("RB5_RR1 : " + Etprop_1_NRT);
+            Console.WriteLine("RR1_RB4 : " + Etprop_2_NRT);
+
+            // E(to) = IPDT 
+            double Eto_1_NRT = Etocz_1_NRT + Etprop_1_NRT + Et_nad_NRT;
+            double Eto_2_NRT = Etocz_2_NRT + Etprop_2_NRT + Et_nad_NRT;
+
+            Console.WriteLine("E(to)_NRT, IPDT ");
+            Console.WriteLine("RB5_RR1 : " + Eto_1_NRT);
+            Console.WriteLine("RR1_RB4 : " + Eto_2_NRT);
+
+
+            //IPDVmax_NRT
+
+            double IPDT_min_NRT = Et_nad_NRT;
+
+            double IPDT_max_NRT_1 = ((K2 + 1) * Et_nad_NRT) / (1 - A_NRT_RB5_RR1);
+            double IPDT_max_NRT_2 = ((K2 + 1) * Et_nad_NRT) / (1 - A_NRT_RR1_RB4);
+
+
+            double IPDV_max_NRT_1 = IPDT_max_NRT_1 - IPDT_min_NRT;
+            double IPDV_max_NRT_2 = IPDT_max_NRT_2 - IPDT_min_NRT;
+
+            Console.WriteLine("\nIPDT_min_NRT : " + IPDT_min_NRT);
+            Console.WriteLine("IPDT_max_NRT_1 : " + IPDT_max_NRT_1);
+            Console.WriteLine("IPDT_max_NRT_2 : " + IPDT_max_NRT_2);
+
+
+            Console.WriteLine("IPDV_max_NRT_1 : " + IPDV_max_NRT_1);
+            Console.WriteLine("IPDV_max_NRT_2 : " + IPDV_max_NRT_2);
+
+            // Koncowe wartosci - Sumy NRT 
+            Console.WriteLine("\nKoncowe wartosci - sumy - NRT ");
+            Console.WriteLine("IPLR_NRT = " + (B1_NRT + B2_NRT));
+            Console.WriteLine("IPDT_NRT = " + (Eto_1_NRT + Eto_2_NRT));
+            Console.WriteLine("IPDV_max_sum_NRT = " + (IPDV_max_NRT_1+IPDV_max_NRT_2));
+
+
+
+
+        }
+    }
+}
